@@ -35,6 +35,40 @@ The dataset includes fields such as chart date, position, song, artist, populari
 
 ## Project Workflow
 
+### SQL Analysis and Validation
+
+The project includes four SQL scripts in the `sql/` directory. They use the `SpotifyWrapped` SQL Server database and the `stg_Spotify`, `DimDate`, and `FactSpotifyChart` tables.
+
+#### 1. Schema Inspection — `01_inspect_table_schema.sql`
+
+- Queries `INFORMATION_SCHEMA.COLUMNS` to inspect the staging table, date dimension, and chart fact table.
+- Reports each column's name, data type, nullability, and ordinal position.
+- Helps verify the database structure before writing analysis queries.
+
+#### 2. Data Quality Validation — `02_data_quality_validation.sql`
+
+- Counts total chart entries and distinct songs and artists.
+- Checks for missing or blank song and artist values.
+- Identifies repeated song–artist entries on the same chart date.
+- Reports the first and last chart dates and the number of distinct chart dates.
+
+#### 3. Song and Artist Analysis — `03_song_artist_analysis.sql`
+
+- Ranks the top 10 songs by chart appearances, including best and average chart position.
+- Ranks the top 10 artists by chart appearances, with unique-song counts and average position.
+- Finds the top 10 songs by average popularity and reports peak popularity.
+- Summarizes monthly chart entries, unique songs, and average popularity by joining the fact table to `DimDate`.
+
+#### 4. Album and Chart Performance — `04_album_and_chart_performance.sql`
+
+- Compares chart entries, unique songs, and average popularity across album types.
+- Groups song–artist combinations by their best-ever chart position: No. 1, Top 5, Top 10, or Top 50.
+- Ranks artists by average chart position, with chart-entry counts and best position.
+- Ranks the top 10 songs by average popularity, including best chart position and chart appearances.
+
+These scripts provide SQL-based schema inspection, data-quality checks, aggregation, grouping, ranking, CTEs, and joins to support the dashboard analysis.
+
+
 ### Python Data Cleaning and Feature Engineering
 
 The `python/python02_cleaning.py` script prepares the raw Spotify chart data for downstream SQL analysis and Power BI reporting.
