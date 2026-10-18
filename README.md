@@ -35,6 +35,20 @@ The dataset includes fields such as chart date, position, song, artist, populari
 
 ## Project Workflow
 
+### Python Data Cleaning and Feature Engineering
+
+The `python/python02_cleaning.py` script prepares the raw Spotify chart data for downstream SQL analysis and Power BI reporting.
+
+- Loads the raw CSV from `raw/spotify-top-50-world.csv` and writes the processed dataset to `processed/spotify_top50_clean.csv` using project-relative paths.
+- Converts chart dates and song release dates into datetime formats.
+- Adds date-analysis fields: release year, chart year, chart month, month name, and month-year label.
+- Calculates song-level metrics: distinct days on chart, average chart position, peak position, and total chart appearances.
+- Calculates artist-level metrics: total chart appearances and average chart position.
+- Creates an `is_top_10` flag for records with a chart position of 10 or better.
+- Saves the enriched dataset without writing the DataFrame index and prints row counts, column names, output path, and completion status for validation.
+
+The script enriches each chart record with analysis-ready features; it does not aggregate the dataset to one row per song or artist.
+
 ### Python Data Inspection
 
 The `python/python01_inspection.py` script performs an initial inspection of the raw Spotify chart dataset using Python and Pandas.
