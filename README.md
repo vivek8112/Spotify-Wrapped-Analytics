@@ -35,6 +35,18 @@ The dataset includes fields such as chart date, position, song, artist, populari
 
 ## Project Workflow
 
+### Python Data Inspection
+
+The `python/python01_inspection.py` script performs an initial inspection of the raw Spotify chart dataset using Python and Pandas.
+
+- Loads the raw CSV file from the project's `raw/` directory using a project-relative path.
+- Converts chart dates and song release dates into datetime formats.
+- Checks chart-date continuity by identifying the smallest and largest gaps between consecutive chart dates.
+- Validates chart positions by checking the number of unique positions recorded for each date.
+- Reports dates with fewer than 50 unique chart positions.
+
+The script prints its validation results to the console and does not modify the source dataset.
+
 1. **Data inspection:** examined the raw dataset, column types, date coverage, missing values, duplicates, and chart-position consistency.
 2. **Data cleaning:** used Python and Pandas to standardize date fields, prepare analytical columns, and export the cleaned dataset.
 3. **SQL data modeling:** loaded the prepared data into SQL Server and organized it for analysis using a date dimension and chart fact table.
