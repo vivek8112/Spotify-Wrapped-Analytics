@@ -115,6 +115,38 @@ Explores unique songs by month, artists with the most chart appearances, song po
 
 Examines artist rankings by average chart position, peak-position distribution, and the top 10 songs by average popularity.
 
+### Power BI Dashboard and DAX
+
+The Power BI report contains three pages designed to explore Spotify chart performance from different perspectives.
+
+#### Page 1 — Spotify Wrapped
+
+- Highlights the overall dataset with KPI cards for chart entries, unique songs, and unique artists.
+- Features a selected song's performance, including peak chart position, average position, and chart appearances.
+- Shows songs with the most chart appearances and monthly popularity trends.
+
+#### Page 2 — Music Trends
+
+- Tracks the number of unique songs by month.
+- Compares artists by total chart appearances.
+- Highlights songs with the highest average popularity.
+- Shows the distribution of chart entries by album type.
+
+#### Page 3 — Artist & Song Performance
+
+- Ranks artists by average chart position.
+- Groups song–artist combinations into peak-position bands: No. 1, Top 5, Top 10, and Top 50.
+- Compares songs by average popularity.
+
+#### Key DAX and calculated columns
+
+- `Unique Songs` — counts distinct song titles.
+- `Unique Artists` — counts distinct artist names.
+- `AlbumType_Display` — provides a display-friendly album-type category for visuals.
+- `Peak Position Band` — classifies each song–artist combination using its best chart position.
+
+The report connects `FactSpotifyChart[ChartDate]` to `DimDate[Date]` using an active many-to-one relationship, enabling date-based filtering and trend analysis.
+
 ## Dashboard Preview
 
 ### Page 1 — Spotify Wrapped
