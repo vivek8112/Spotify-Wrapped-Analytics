@@ -35,117 +35,98 @@ The dataset includes fields such as chart date, position, song, artist, populari
 
 ## Project Workflow
 
+1. **Data inspection:** examined the raw dataset, column types, date coverage, and chart-position consistency.
+2. **Data cleaning:** used Python and Pandas to standardize date fields, create analytical features, and export the processed dataset.
+3. **SQL data modeling:** loaded the prepared data into SQL Server and organized it for analysis using a date dimension and chart fact table.
+4. **Data validation and analysis:** checked data quality and used SQL aggregations, rankings, and joins to explore songs, artists, albums, and monthly trends.
+5. **Power BI development:** connected the warehouse to Power BI, created analytical visuals, and applied a dark Spotify-inspired design.
+
+### Python Data Inspection
+
+The `python/python01_inspection.py` script performs an initial inspection of the raw dataset using Python and Pandas.
+
+- Loads the CSV from the project's `raw/` directory using a project-relative path.
+- Converts chart dates and song release dates into datetime formats.
+- Checks chart-date continuity and identifies gaps greater than one day.
+- Validates the number of unique chart positions recorded for each date.
+- Reports dates with fewer than 50 unique chart positions.
+
+The script prints validation results to the console and does not modify the source dataset.
+
+### Python Data Cleaning and Feature Engineering
+
+The `python/python02_cleaning.py` script prepares the raw chart data for SQL analysis and Power BI reporting.
+
+- Loads `raw/spotify-top-50-world.csv` and writes the processed dataset to `processed/spotify_top50_clean.csv`.
+- Converts chart dates and release dates into datetime formats.
+- Adds release year, chart year, chart month, month name, and month-year fields.
+- Calculates song-level metrics: days on chart, average position, peak position, and chart appearances.
+- Calculates artist-level chart appearances and average position.
+- Creates an `is_top_10` flag for chart positions 10 or better.
+- Saves the enriched CSV without the DataFrame index and prints output details for validation.
+
+The script adds analytical features to each chart record; it does not reduce the dataset to one row per song or artist.
+
 ### SQL Analysis and Validation
 
 The project includes four SQL scripts in the `sql/` directory. They use the `SpotifyWrapped` SQL Server database and the `stg_Spotify`, `DimDate`, and `FactSpotifyChart` tables.
 
 #### 1. Schema Inspection — `01_inspect_table_schema.sql`
 
-- Queries `INFORMATION_SCHEMA.COLUMNS` to inspect the staging table, date dimension, and chart fact table.
-- Reports each column's name, data type, nullability, and ordinal position.
-- Helps verify the database structure before writing analysis queries.
+- Inspects the staging table, date dimension, and chart fact table through `INFORMATION_SCHEMA.COLUMNS`.
+- Reports column names, data types, nullability, and ordinal positions.
 
 #### 2. Data Quality Validation — `02_data_quality_validation.sql`
 
-- Counts total chart entries and distinct songs and artists.
-- Checks for missing or blank song and artist values.
+- Counts chart entries and distinct songs and artists.
+- Checks missing or blank song and artist values.
 - Identifies repeated song–artist entries on the same chart date.
-- Reports the first and last chart dates and the number of distinct chart dates.
+- Reports chart date coverage and the number of distinct chart dates.
 
 #### 3. Song and Artist Analysis — `03_song_artist_analysis.sql`
 
-- Ranks the top 10 songs by chart appearances, including best and average chart position.
-- Ranks the top 10 artists by chart appearances, with unique-song counts and average position.
-- Finds the top 10 songs by average popularity and reports peak popularity.
-- Summarizes monthly chart entries, unique songs, and average popularity by joining the fact table to `DimDate`.
+- Ranks songs by chart appearances and reports best and average positions.
+- Ranks artists by chart appearances, unique-song counts, and average position.
+- Identifies songs with high average and peak popularity.
+- Summarizes monthly chart entries, unique songs, and average popularity using the date dimension.
 
 #### 4. Album and Chart Performance — `04_album_and_chart_performance.sql`
 
-- Compares chart entries, unique songs, and average popularity across album types.
-- Groups song–artist combinations by their best-ever chart position: No. 1, Top 5, Top 10, or Top 50.
-- Ranks artists by average chart position, with chart-entry counts and best position.
-- Ranks the top 10 songs by average popularity, including best chart position and chart appearances.
+- Compares chart entries, unique songs, and average popularity by album type.
+- Groups song–artist combinations by best chart position: No. 1, Top 5, Top 10, or Top 50.
+- Ranks artists by average chart position and songs by average popularity.
 
-These scripts provide SQL-based schema inspection, data-quality checks, aggregation, grouping, ranking, CTEs, and joins to support the dashboard analysis.
-
-
-### Python Data Cleaning and Feature Engineering
-
-The `python/python02_cleaning.py` script prepares the raw Spotify chart data for downstream SQL analysis and Power BI reporting.
-
-- Loads the raw CSV from `raw/spotify-top-50-world.csv` and writes the processed dataset to `processed/spotify_top50_clean.csv` using project-relative paths.
-- Converts chart dates and song release dates into datetime formats.
-- Adds date-analysis fields: release year, chart year, chart month, month name, and month-year label.
-- Calculates song-level metrics: distinct days on chart, average chart position, peak position, and total chart appearances.
-- Calculates artist-level metrics: total chart appearances and average chart position.
-- Creates an `is_top_10` flag for records with a chart position of 10 or better.
-- Saves the enriched dataset without writing the DataFrame index and prints row counts, column names, output path, and completion status for validation.
-
-The script enriches each chart record with analysis-ready features; it does not aggregate the dataset to one row per song or artist.
-
-### Python Data Inspection
-
-The `python/python01_inspection.py` script performs an initial inspection of the raw Spotify chart dataset using Python and Pandas.
-
-- Loads the raw CSV file from the project's `raw/` directory using a project-relative path.
-- Converts chart dates and song release dates into datetime formats.
-- Checks chart-date continuity by identifying the smallest and largest gaps between consecutive chart dates.
-- Validates chart positions by checking the number of unique positions recorded for each date.
-- Reports dates with fewer than 50 unique chart positions.
-
-The script prints its validation results to the console and does not modify the source dataset.
-
-1. **Data inspection:** examined the raw dataset, column types, date coverage, missing values, duplicates, and chart-position consistency.
-2. **Data cleaning:** used Python and Pandas to standardize date fields, prepare analytical columns, and export the cleaned dataset.
-3. **SQL data modeling:** loaded the prepared data into SQL Server and organized it for analysis using a date dimension and chart fact table.
-4. **Data validation:** checked record counts, distinct songs and artists, blank values, and other data-quality conditions.
-5. **Power BI development:** connected the warehouse to Power BI, created analytical visuals, and applied a dark Spotify-inspired design.
+Together, the SQL scripts demonstrate schema inspection, data-quality validation, aggregation, grouping, ranking, CTEs, and joins.
 
 ## Dashboard Pages
 
 ### 1. Spotify Wrapped
 
-An overview of the dataset and key chart insights, presented in a Spotify-inspired summary layout.
+- Summarizes chart entries, unique songs, and unique artists with KPI cards.
+- Highlights a selected song's peak position, average position, and chart appearances.
+- Shows songs with the most chart appearances and monthly popularity trends.
 
 ### 2. Music Trends
 
-Explores unique songs by month, artists with the most chart appearances, song popularity, and album-type distribution.
+- Tracks unique songs by month.
+- Compares artists by chart appearances.
+- Highlights songs with high average popularity.
+- Shows the distribution of chart entries by album type.
 
 ### 3. Artist & Song Performance
 
-Examines artist rankings by average chart position, peak-position distribution, and the top 10 songs by average popularity.
-
-### Power BI Dashboard and DAX
-
-The Power BI report contains three pages designed to explore Spotify chart performance from different perspectives.
-
-#### Page 1 — Spotify Wrapped
-
-- Highlights the overall dataset with KPI cards for chart entries, unique songs, and unique artists.
-- Features a selected song's performance, including peak chart position, average position, and chart appearances.
-- Shows songs with the most chart appearances and monthly popularity trends.
-
-#### Page 2 — Music Trends
-
-- Tracks the number of unique songs by month.
-- Compares artists by total chart appearances.
-- Highlights songs with the highest average popularity.
-- Shows the distribution of chart entries by album type.
-
-#### Page 3 — Artist & Song Performance
-
 - Ranks artists by average chart position.
-- Groups song–artist combinations into peak-position bands: No. 1, Top 5, Top 10, and Top 50.
+- Shows peak-position bands: No. 1, Top 5, Top 10, and Top 50.
 - Compares songs by average popularity.
 
-#### Key DAX and calculated columns
+### Key DAX Measures and Calculated Columns
 
 - `Unique Songs` — counts distinct song titles.
 - `Unique Artists` — counts distinct artist names.
 - `AlbumType_Display` — provides a display-friendly album-type category for visuals.
 - `Peak Position Band` — classifies each song–artist combination using its best chart position.
 
-The report connects `FactSpotifyChart[ChartDate]` to `DimDate[Date]` using an active many-to-one relationship, enabling date-based filtering and trend analysis.
+The report connects `FactSpotifyChart[ChartDate]` to `DimDate[Date]` through an active many-to-one relationship, enabling date-based filtering and trend analysis.
 
 ## Dashboard Preview
 
