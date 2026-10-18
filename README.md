@@ -55,6 +55,20 @@ Explores unique songs by month, artists with the most chart appearances, song po
 
 Examines artist rankings by average chart position, peak-position distribution, and the top 10 songs by average popularity.
 
+## Dashboard Preview
+
+### Page 1 — Spotify Wrapped
+
+![Spotify Wrapped Dashboard](screenshots/page1_spotify_wrapped.png)
+
+### Page 2 — Music Trends
+
+![Music Trends Dashboard](screenshots/page2_music_trends.png)
+
+### Page 3 — Artist & Song Performance
+
+![Artist & Song Performance Dashboard](screenshots/page3_artist_song_performance.png)
+
 ## Key Analytical Areas
 
 - Song popularity comparisons
