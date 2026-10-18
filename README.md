@@ -81,7 +81,7 @@ Examines artist rankings by average chart position, peak-position distribution, 
 ## Repository Structure
 
 ```text
-Spotify_Wrapped_Analytics/
+Spotify-Wrapped-Analytics/
 ├── raw/
 │   └── spotify-top-50-world.csv
 ├── processed/
@@ -90,8 +90,17 @@ Spotify_Wrapped_Analytics/
 │   ├── python01_inspection.py
 │   └── python02_cleaning.py
 ├── sql/
+│   ├── 01_inspect_table_schema.sql
+│   ├── 02_data_quality_validation.sql
+│   ├── 03_song_artist_analysis.sql
+│   └── 04_album_and_chart_performance.sql
 ├── powerbi/
+│   ├── Icons/
+│   └── Spotify_Wrapped_Analytics.pbix
 └── screenshots/
+    ├── page1_spotify_wrapped.png
+    ├── page2_music_trends.png
+    └── page3_artist_song_performance.png
 ```
 
 ## How to Explore the Project
